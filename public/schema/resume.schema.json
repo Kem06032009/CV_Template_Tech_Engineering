@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tech Engineering Resume",
+  "description": "Editable resume schema for CV Template Tech Engineering",
+  "type": "object",
+  "required": ["version", "meta", "personal", "summary", "sectionOrder", "skills", "experience", "projects", "certifications", "education", "languages"],
+  "properties": {
+    "version": { "const": "1.0" },
+    "meta": {
+      "type": "object",
+      "properties": {
+        "layout": {
+          "enum": ["single-column-ats", "two-column-modern", "compact-senior"]
+        },
+        "theme": { "enum": ["light", "dark", "system"] },
+        "locale": { "type": "string" }
+      }
+    },
+    "personal": {
+      "type": "object",
+      "required": ["fullName", "title", "contact"],
+      "properties": {
+        "fullName": { "type": "string" },
+        "title": { "type": "string" },
+        "avatar": { "type": "string" },
+        "qrEnabled": { "type": "boolean" },
+        "contact": {
+          "type": "object",
+          "required": ["email"],
+          "properties": {
+            "email": { "type": "string", "format": "email" },
+            "phone": { "type": "string" },
+            "location": { "type": "string" },
+            "linkedin": { "type": "string" },
+            "github": { "type": "string" },
+            "portfolio": { "type": "string" },
+            "blog": { "type": "string" },
+            "stackoverflow": { "type": "string" }
+          }
+        }
+      }
+    },
+    "summary": { "type": "string" },
+    "sectionOrder": {
+      "type": "array",
+      "items": {
+        "enum": ["summary", "skills", "experience", "projects", "certifications", "education", "opensource", "languages"]
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "proficiency": {
+                  "enum": ["expert", "advanced", "intermediate", "familiar"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "experience": { "type": "array" },
+    "projects": { "type": "array" },
+    "certifications": { "type": "array" },
+    "education": { "type": "array" },
+    "openSource": { "type": "object" },
+    "languages": { "type": "array" }
+  }
+}

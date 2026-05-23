@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+
+  --color-graphite-50: #f7f8f9;
+  --color-graphite-100: #eceef1;
+  --color-graphite-200: #d5d9e0;
+  --color-graphite-300: #b0b8c4;
+  --color-graphite-400: #8490a2;
+  --color-graphite-500: #667085;
+  --color-graphite-600: #515c6e;
+  --color-graphite-700: #434c5c;
+  --color-graphite-800: #3a414f;
+  --color-graphite-900: #333843;
+  --color-graphite-950: #1a1d24;
+
+  --color-electric-400: #3b9eff;
+  --color-electric-500: #0a84ff;
+  --color-electric-600: #0066cc;
+
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+}
+
+:root {
+  --cv-bg: #ffffff;
+  --cv-fg: #1a1d24;
+  --cv-muted: #515c6e;
+  --cv-border: #d5d9e0;
+  --cv-accent: #0a84ff;
+  --cv-accent-soft: #e8f4ff;
+  --cv-surface: #f7f8f9;
+  --cv-tag-bg: #eceef1;
+  --cv-tag-fg: #333843;
+}
+
+.dark {
+  --cv-bg: #0f1115;
+  --cv-fg: #f7f8f9;
+  --cv-muted: #b0b8c4;
+  --cv-border: #3a414f;
+  --cv-accent: #3b9eff;
+  --cv-accent-soft: #0d1f33;
+  --cv-surface: #1a1d24;
+  --cv-tag-bg: #252a33;
+  --cv-tag-fg: #eceef1;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--cv-surface);
+  color: var(--cv-fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer utilities {
+  .cv-paper {
+    background: var(--cv-bg);
+    color: var(--cv-fg);
+  }
+
+  .text-cv-muted {
+    color: var(--cv-muted);
+  }
+
+  .border-cv {
+    border-color: var(--cv-border);
+  }
+
+  .bg-cv-surface {
+    background: var(--cv-surface);
+  }
+
+  .text-cv-accent {
+    color: var(--cv-accent);
+  }
+
+  .bg-cv-accent-soft {
+    background: var(--cv-accent-soft);
+  }
+
+  .skill-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    background: var(--cv-tag-bg);
+    color: var(--cv-tag-fg);
+    border: 1px solid var(--cv-border);
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .cv-paper {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .print-break-avoid {
+    break-inside: avoid;
+  }
+}
