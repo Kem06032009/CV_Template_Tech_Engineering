@@ -26,7 +26,7 @@ export const resumeBasic = {
       "Senior System Administrator · DevOps Engineer · Lead Developer",
     avatar: "",
     contact: {
-      email: "",
+      email: "nghiasoothsayer@gmail.com",
       phone: "0968.884.946",
       birthDate: "06/09/1996",
       location: "Việt Nam · Ưu tiên Ubuntu Server",
