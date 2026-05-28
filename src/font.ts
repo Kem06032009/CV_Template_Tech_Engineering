@@ -4,25 +4,27 @@
  *  Hướng dẫn: src/huongdan.md
  * ═══════════════════════════════════════════════════════════════
  *
- * Sau khi đổi `variable`, cập nhật khớp trong src/app/layout.tsx (next/font).
+ * Không dùng next/font/google — font hệ thống, không tải từ Google.
  */
 
 export const fonts = {
   sans: {
-    family: "Inter",
-    variable: "--font-inter",
+    family: "system-ui",
+    stack:
+      'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   },
   mono: {
-    family: "JetBrains Mono",
-    variable: "--font-jetbrains",
+    family: "ui-monospace",
+    stack:
+      'ui-monospace, "Cascadia Code", "Segoe UI Mono", "SF Mono", Menlo, Consolas, monospace',
   },
 } as const;
 
 export function getFontCssBlock(theme = fonts): string {
   return [
     ":root {",
-    `  --font-sans: var(${theme.sans.variable}), ui-sans-serif, system-ui, sans-serif;`,
-    `  --font-mono: var(${theme.mono.variable}), ui-monospace, monospace;`,
+    `  --font-sans: ${theme.sans.stack};`,
+    `  --font-mono: ${theme.mono.stack};`,
     "}",
   ].join("\n");
 }

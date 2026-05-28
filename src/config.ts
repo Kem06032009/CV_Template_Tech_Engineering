@@ -27,6 +27,13 @@ export const configBasic = {
 
   /** Ngôn ngữ mặc định CV: vi | en */
   defaultLocale: "vi" as "vi" | "en",
+
+  /**
+   * Chặn Google/Bing index trang CV.
+   * true = meta noindex + robots.txt Disallow + header X-Robots-Tag.
+   * Đặt false nếu muốn CV xuất hiện trên tìm kiếm.
+   */
+  blockSearchIndexing: true,
 } as const;
 
 /** Cấu hình nâng cao — hiển thị web, export, bật/tắt tính năng */
@@ -61,8 +68,13 @@ export const configAdvanced = {
     exportPdf: true,
     /** Nút tải DOCX */
     exportDocx: true,
-    /** API /api/translate — tắt nếu không deploy server */
+    /** API /api/translate — MyMemory only, không dùng Google/Lingva */
     translationApi: true,
+    /**
+     * Chặn Google: font hệ thống (không fonts.googleapis.com),
+     * CSP chặn domain Google, dịch không qua Google Translate.
+     */
+    blockGoogle: true,
   },
 } as const;
 

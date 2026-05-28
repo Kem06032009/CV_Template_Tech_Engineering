@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { getThemeCssBlock } from "@/color";
 import { getFontCssBlock } from "@/font";
@@ -9,17 +8,7 @@ import { defaultResume } from "@/resume";
 import { buildPersonJsonLd } from "@/lib/seo";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter", // khớp fonts.sans.variable trong src/font.ts
-  display: "swap",
-});
-
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains", // khớp fonts.mono.variable trong src/font.ts
-  display: "swap",
-});
+const blockSearch = appConfig.blockSearchIndexing;
 
 export const metadata: Metadata = {
   title: appConfig.title,
@@ -36,7 +25,23 @@ export const metadata: Metadata = {
     title: appConfig.title,
     description: appConfig.description,
   },
-  robots: { index: true, follow: true },
+  robots: blockSearch
+    ? {
+        index: false,
+        follow: false,
+        nocache: true,
+        noarchive: true,
+        nosnippet: true,
+        noimageindex: true,
+        googleBot: {
+          index: false,
+          follow: false,
+          noimageindex: true,
+          noarchive: true,
+          nosnippet: true,
+        },
+      }
+    : { index: true, follow: true },
   icons: {
     icon: DEFAULT_AVATAR_SRC,
     shortcut: DEFAULT_AVATAR_SRC,
@@ -61,17 +66,19 @@ export default function RootLayout({
   return (
     <html lang={defaultResume.meta.locale} suppressHydrationWarning>
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-        />
+        {!blockSearch && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          />
+        )}
         <style
           dangerouslySetInnerHTML={{
             __html: `${getThemeCssBlock()}\n${getFontCssBlock()}`,
           }}
         />
       </head>
-      <body className={`${inter.variable} ${jetbrains.variable} antialiased`}>
+      <body className="antialiased">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

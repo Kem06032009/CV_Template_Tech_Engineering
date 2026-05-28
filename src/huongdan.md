@@ -69,6 +69,8 @@ Export từ file này: `defaultResume`, `buildResume()`.
 
 Xem các file tương ứng — phần `config.ts` → `features` để bật/tắt nút In/PDF/DOCX, dịch EN, đổi layout.
 
+**Chặn Google tìm kiếm CV:** trong `config.ts` đặt `blockSearchIndexing: true` (mặc định). Trang gửi `noindex`, `robots.txt` chặn crawl, và header `X-Robots-Tag`. Muốn SEO công khai → đặt `false`.
+
 ---
 
 ## Quy trình

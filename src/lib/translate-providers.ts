@@ -1,13 +1,7 @@
 /**
- * Dịch miễn phí VI → EN (Lingva + MyMemory dự phòng).
+ * Dịch VI → EN qua MyMemory (không dùng Google / Lingva).
  * Tùy chọn: MYMEMORY_EMAIL trong .env.local
  */
-
-const LINGVA_INSTANCES = [
-  "https://lingva.ml",
-  "https://lingva.lunar.icu",
-  "https://translate.plausibility.cloud",
-];
 
 const FETCH_TIMEOUT_MS = 12_000;
 
@@ -23,26 +17,17 @@ function fetchWithTimeout(url: string, init?: RequestInit) {
   return fetch(url, { ...init, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
 }
 
-async function translateViaLingva(text: string): Promise<string> {
-  const chunk = text.trim().slice(0, 1800);
-  const encoded = encodeURIComponent(chunk);
-  let lastError: Error | null = null;
-
-  for (const base of LINGVA_INSTANCES) {
-    try {
-      const res = await fetchWithTimeout(`${base}/api/v1/vi/en/${encoded}`);
-      if (!res.ok) {
-        lastError = new Error(`Lingva ${res.status}`);
-        continue;
-      }
-      const json = (await res.json()) as { translation?: string; error?: string };
-      if (json.translation) return normalizeTranslation(json.translation);
-      lastError = new Error(json.error || "Lingva empty response");
-    } catch (e) {
-      lastError = e instanceof Error ? e : new Error(String(e));
-    }
+function assertNotGoogleUrl(url: string): void {
+  const host = new URL(url).hostname.toLowerCase();
+  if (
+    host === "google.com" ||
+    host.endsWith(".google.com") ||
+    host.endsWith(".googleapis.com") ||
+    host.endsWith(".gstatic.com") ||
+    host.includes("googleusercontent")
+  ) {
+    throw new Error("Google services are blocked");
   }
-  throw lastError ?? new Error("Lingva unavailable");
 }
 
 async function translateViaMyMemory(text: string): Promise<string> {
@@ -52,6 +37,8 @@ async function translateViaMyMemory(text: string): Promise<string> {
   url.searchParams.set("langpair", "vi|en");
   const email = process.env.MYMEMORY_EMAIL?.trim();
   if (email) url.searchParams.set("de", email);
+
+  assertNotGoogleUrl(url.toString());
 
   const res = await fetchWithTimeout(url.toString());
   if (!res.ok) throw new Error(`MyMemory HTTP ${res.status}`);
@@ -76,12 +63,7 @@ export async function translateTextFree(text: string): Promise<string> {
   if (!trimmed) return text;
   const hit = cache.get(trimmed);
   if (hit) return hit;
-  let translated: string;
-  try {
-    translated = await translateViaLingva(trimmed);
-  } catch {
-    translated = await translateViaMyMemory(trimmed);
-  }
+  const translated = await translateViaMyMemory(trimmed);
   cache.set(trimmed, translated);
   return translated;
 }
