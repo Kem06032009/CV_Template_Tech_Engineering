@@ -63,7 +63,7 @@ function collectTranslatableStrings(data: Resume, set: Set<string>) {
     add(exp.position);
     add(exp.location);
     exp.responsibilities?.forEach(add);
-    exp.achievements.forEach(add);
+    (exp.achievements ?? []).forEach(add);
   }
 
   for (const proj of data.projects) {
@@ -71,7 +71,7 @@ function collectTranslatableStrings(data: Resume, set: Set<string>) {
     add(proj.description);
     add(proj.architecture);
     proj.achievements?.forEach(add);
-    proj.stack.forEach(add);
+    (proj.stack ?? []).forEach(add);
   }
 
   for (const cert of data.certifications) {
@@ -149,7 +149,7 @@ export async function translateResumeData(data: Resume): Promise<Resume> {
       position: applyMap(exp.position, map),
       location: exp.location ? applyMap(exp.location, map) : undefined,
       responsibilities: exp.responsibilities?.map((r) => applyMap(r, map)),
-      achievements: exp.achievements.map((a) => applyMap(a, map)),
+      achievements: (exp.achievements ?? []).map((a) => applyMap(a, map)),
     })),
     projects: data.projects.map((proj) => ({
       ...proj,
@@ -157,7 +157,7 @@ export async function translateResumeData(data: Resume): Promise<Resume> {
       description: proj.description ? applyMap(proj.description, map) : undefined,
       architecture: proj.architecture ? applyMap(proj.architecture, map) : undefined,
       achievements: proj.achievements?.map((a) => applyMap(a, map)),
-      stack: proj.stack.map((t) => applyMap(t, map)),
+      stack: (proj.stack ?? []).map((t) => applyMap(t, map)),
     })),
     certifications: data.certifications.map((c) => ({
       ...c,

@@ -1,4 +1,4 @@
-import { defaultResume } from "@/data/resume";
+import { defaultResume } from "@/resume";
 import { translateResumeData } from "@/lib/translate-cv";
 import type { Resume } from "@/lib/schema/resume";
 import { NextResponse } from "next/server";

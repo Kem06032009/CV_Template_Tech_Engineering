@@ -4,8 +4,6 @@ import type { Resume } from "@/lib/schema/resume";
 
 /** ATS-optimized: single column, semantic HTML, no complex grids */
 export function SingleColumnATS({ resume }: { resume: Resume }) {
-  const mainSections = resume.sectionOrder.filter((id) => id !== "languages");
-
   return (
     <article
       className="cv-paper max-w-[210mm] mx-auto leading-relaxed"
@@ -17,7 +15,7 @@ export function SingleColumnATS({ resume }: { resume: Resume }) {
       <meta itemProp="email" content={resume.personal.contact.email} />
 
       <div className="space-y-6">
-        {mainSections.map((sectionId) => (
+        {resume.sectionOrder.map((sectionId) => (
           <SectionRenderer
             key={sectionId}
             sectionId={sectionId}
@@ -25,9 +23,6 @@ export function SingleColumnATS({ resume }: { resume: Resume }) {
             variant="default"
           />
         ))}
-        {resume.languages.length > 0 && (
-          <SectionRenderer sectionId="languages" resume={resume} variant="default" />
-        )}
       </div>
     </article>
   );

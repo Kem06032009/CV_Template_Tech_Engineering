@@ -80,9 +80,11 @@ export function ProjectsSection({
                 {proj.architecture}
               </p>
             )}
-            <p className="text-xs font-mono mt-2 text-cv-muted">
-              {proj.stack.join(" · ")}
-            </p>
+            {(proj.stack?.length ?? 0) > 0 && (
+              <p className="text-xs font-mono mt-2 text-cv-muted">
+                {(proj.stack ?? []).join(" · ")}
+              </p>
+            )}
             {proj.achievements && proj.achievements.length > 0 && (
               <ul className="mt-2 space-y-1 list-disc list-outside ml-4">
                 {proj.achievements.map((a, i) => (

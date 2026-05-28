@@ -1,43 +1,28 @@
 # Tech Engineering CV Template
 
-Template CV kỹ thuật — **trang chỉ xem CV**, giao diện tech hiện đại. Chỉnh nội dung trong `src/data/`.
+CV kỹ thuật — xem trên web, chỉnh bằng code trong **`src/`**.
 
-## Layout theo ngành
+## Chạy
 
-| Layout | Phù hợp |
-|--------|---------|
-| `two-column-modern` | Software, DevOps, full-stack |
-| `single-column-ats` | Ứng tuyển qua ATS |
-| `compact-senior` | Tech lead / architect |
-
-Cấu hình trong `src/data/config.ts` hoặc `resume.meta.layout`.
-
-## Chỉnh CV
-
-| File | Hướng dẫn |
-|------|-----------|
-| [`src/data/resume.ts`](src/data/resume.ts) | [resume.md](src/data/resume.md) |
-| [`src/data/config.ts`](src/data/config.ts) | [config.md](src/data/config.md) |
-| Tổng quan | [HUONG_DAN_NHAP_LIEU.md](src/data/HUONG_DAN_NHAP_LIEU.md) |
-
-Sửa file → lưu → làm mới trình duyệt. Deploy production cần build và publish lại.
-
-## Tính năng trang web
-
-- 3 layout (cấu hình trong `config.ts` / `resume.meta`)
-- Dark / light (nút header — chỉ đổi cách xem)
-- CV phóng **2×** trên trình duyệt (`browserDisplayScale` trong `config.ts`)
-- **In CV** (A4 scale 1:1) + tải **DOCX**
-
-Không có editor trên web — chỉnh bằng code trong `src/`.
-
-## Cấu trúc
-
+```bash
+npm install
+npm run dev
 ```
-src/data/              ← Dữ liệu CV + hướng dẫn .md
-src/components/cv/     ← UI hiển thị
-src/app/page.tsx       ← Trang xem CV
-```
+
+http://localhost:3000
+
+## Cấu trúc chỉnh sửa (`src/`)
+
+| File | Mục đích |
+|------|----------|
+| [`src/resume-basic.ts`](src/resume-basic.ts) | CV cốt lõi (bắt buộc) |
+| [`src/resume-advanced.ts`](src/resume-advanced.ts) | CV nâng cao (dự án, chứng chỉ, OSS…) |
+| [`src/resume.ts`](src/resume.ts) | Gộp basic + advanced |
+| [`src/avatar.ts`](src/avatar.ts) | Ảnh đại diện |
+| [`src/color.ts`](src/color.ts) | Màu light/dark |
+| [`src/font.ts`](src/font.ts) | Font chữ |
+| [`src/config.ts`](src/config.ts) | Layout, theme, bật/tắt tính năng |
+| [`src/huongdan.md`](src/huongdan.md) | **Hướng dẫn nhập liệu** |
 
 ## License
 

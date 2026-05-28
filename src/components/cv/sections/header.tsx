@@ -9,10 +9,12 @@ import {
   Phone,
   BookOpen,
   Layers,
+  MessageCircle,
+  Share2,
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import Image from "next/image";
-import { avatarConfig, resolveAvatarSrc } from "@/avatar/config";
+import { avatarConfig, resolveAvatarSrc } from "@/avatar";
 import type { Resume } from "@/lib/schema/resume";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +27,8 @@ const iconMap = {
   portfolio: Globe,
   blog: BookOpen,
   stackoverflow: Layers,
+  facebook: Share2,
+  zalo: MessageCircle,
 } as const;
 
 function getInitials(name: string) {
@@ -118,12 +122,15 @@ export function CVHeader({
   personal: Resume["personal"];
   variant?: "default" | "sidebar" | "compact" | "ats";
 }) {
-  const { fullName, title, avatar: resumeAvatar, contact, qrEnabled } = personal;
+  const { fullName, title, alias, avatar: resumeAvatar, contact, qrEnabled } = personal;
   const avatar = resolveAvatarSrc(resumeAvatar);
   const avatarAlt = avatarConfig.alt || fullName;
-  const qrValue = contact.email
-    ? `mailto:${contact.email}`
-    : contact.portfolio || contact.github || "";
+  const qrValue =
+    (contact.email && `mailto:${contact.email}`) ||
+    contact.zalo ||
+    contact.phone ||
+    contact.github ||
+    "";
 
   const links = [
     contact.linkedin && {
@@ -156,6 +163,18 @@ export function CVHeader({
       label: "Stack Overflow",
       icon: iconMap.stackoverflow,
     },
+    contact.facebook && {
+      key: "facebook",
+      href: contact.facebook,
+      label: "Facebook",
+      icon: iconMap.facebook,
+    },
+    contact.zalo && {
+      key: "zalo",
+      href: contact.zalo,
+      label: "Zalo",
+      icon: iconMap.zalo,
+    },
   ].filter(Boolean) as {
     key: string;
     href: string;
@@ -181,12 +200,22 @@ export function CVHeader({
           <AvatarInitials name={fullName} size="lg" className="mb-4 mx-auto" />
         )}
         <h1 className="text-lg font-bold text-center leading-tight">{fullName}</h1>
+        {alias && (
+          <p className="text-xs font-mono text-cv-accent text-center mt-0.5">({alias})</p>
+        )}
         <p className="text-xs text-cv-muted text-center mt-1 leading-snug">{title}</p>
         <div className="mt-4 space-y-2 text-xs">
-          <a href={`mailto:${contact.email}`} className="flex items-center gap-2 text-cv-muted hover:text-cv-accent">
-            <Mail className="h-3.5 w-3.5" />
-            <span className="break-all">{contact.email}</span>
-          </a>
+          {contact.birthDate && (
+            <span className="flex items-center gap-2 text-cv-muted justify-center">
+              Sinh {contact.birthDate}
+            </span>
+          )}
+          {contact.email && (
+            <a href={`mailto:${contact.email}`} className="flex items-center gap-2 text-cv-muted hover:text-cv-accent justify-center">
+              <Mail className="h-3.5 w-3.5" />
+              <span className="break-all">{contact.email}</span>
+            </a>
+          )}
           {contact.phone && (
             <span className="flex items-center gap-2 text-cv-muted">
               <Phone className="h-3.5 w-3.5" />
@@ -247,6 +276,9 @@ export function CVHeader({
             >
               {fullName}
             </h1>
+            {alias && (
+              <p className="text-sm font-mono text-cv-accent mt-0.5">({alias})</p>
+            )}
             <p
               className={cn(
                 "text-cv-accent font-medium mt-1 font-mono",
@@ -270,13 +302,20 @@ export function CVHeader({
           variant === "ats" && "text-sm",
         )}
       >
-        <a
-          href={`mailto:${contact.email}`}
-          className="inline-flex items-center gap-1.5 text-xs text-cv-muted hover:text-cv-accent"
-        >
-          <Mail className="h-3.5 w-3.5" />
-          {contact.email}
-        </a>
+        {contact.birthDate && (
+          <span className="inline-flex items-center gap-1.5 text-xs text-cv-muted">
+            Sinh {contact.birthDate}
+          </span>
+        )}
+        {contact.email && (
+          <a
+            href={`mailto:${contact.email}`}
+            className="inline-flex items-center gap-1.5 text-xs text-cv-muted hover:text-cv-accent"
+          >
+            <Mail className="h-3.5 w-3.5" />
+            {contact.email}
+          </a>
+        )}
         {contact.phone && (
           <span className="inline-flex items-center gap-1.5 text-xs text-cv-muted">
             <Phone className="h-3.5 w-3.5" />

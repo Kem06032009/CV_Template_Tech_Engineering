@@ -1,9 +1,11 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- *  CẤU HÌNH MÀU — chỉnh tại file này
- *  Hướng dẫn: src/color/HUONG_DAN_DOI_MAU.md
+ *  MÀU SẮC — src/color.ts
+ *  Hướng dẫn: src/huongdan.md
  * ═══════════════════════════════════════════════════════════════
  */
+
+import { appConfig } from "@/config";
 
 export const light = {
   cvBg: "#ffffff",
@@ -80,11 +82,12 @@ function block(selector: string, palette: CvPalette): string {
   ].join("\n");
 }
 
-/** Khối CSS inject vào layout ( :root + .dark ) */
+/** CSS inject trong layout.tsx */
 export function getThemeCssBlock(): string {
+  const scale = appConfig.browserDisplayScale;
   return [
     ":root {",
-    "  --cv-display-scale: 2;",
+    `  --cv-display-scale: ${scale};`,
     "  --cv-a4-width: 210mm;",
     "}",
     block(":root", light),

@@ -58,18 +58,22 @@ export function ExperienceSection({
                 {getUiString(locale, "stack")}: {exp.stack.join(" · ")}
               </p>
             )}
-            <ul className="mt-2 space-y-1.5 list-disc list-outside ml-4">
-              {exp.achievements.map((item, i) => (
-                <li key={i} className="text-sm text-cv-muted leading-relaxed">
-                  {item}
-                </li>
-              ))}
-              {exp.responsibilities?.map((item, i) => (
-                <li key={`r-${i}`} className="text-sm text-cv-muted leading-relaxed">
-                  {item}
-                </li>
-              ))}
-            </ul>
+            {(() => {
+              const bullets = [
+                ...(exp.achievements ?? []),
+                ...(exp.responsibilities ?? []),
+              ];
+              if (bullets.length === 0) return null;
+              return (
+                <ul className="mt-2 space-y-1.5 list-disc list-outside ml-4">
+                  {bullets.map((item, i) => (
+                    <li key={i} className="text-sm text-cv-muted leading-relaxed">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              );
+            })()}
           </article>
         ))}
       </div>

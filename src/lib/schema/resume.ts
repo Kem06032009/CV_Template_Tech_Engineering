@@ -8,14 +8,17 @@ export const proficiencySchema = z.enum([
 ]);
 
 export const contactSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().optional().or(z.literal("")),
   phone: z.string().optional(),
   location: z.string().optional(),
+  birthDate: z.string().optional(),
   linkedin: z.string().url().optional().or(z.literal("")),
   github: z.string().url().optional().or(z.literal("")),
   portfolio: z.string().url().optional().or(z.literal("")),
   blog: z.string().url().optional().or(z.literal("")),
   stackoverflow: z.string().url().optional().or(z.literal("")),
+  facebook: z.string().url().optional().or(z.literal("")),
+  zalo: z.string().url().optional().or(z.literal("")),
 });
 
 export const skillItemSchema = z.object({
@@ -39,7 +42,7 @@ export const experienceSchema = z.object({
   current: z.boolean().optional(),
   stack: z.array(z.string()).optional(),
   responsibilities: z.array(z.string()).optional(),
-  achievements: z.array(z.string()),
+  achievements: z.array(z.string()).optional().default([]),
 });
 
 export const projectSchema = z.object({
@@ -48,7 +51,7 @@ export const projectSchema = z.object({
   description: z.string().optional(),
   github: z.string().url().optional().or(z.literal("")),
   demo: z.string().url().optional().or(z.literal("")),
-  stack: z.array(z.string()),
+  stack: z.array(z.string()).optional().default([]),
   architecture: z.string().optional(),
   achievements: z.array(z.string()).optional(),
   featured: z.boolean().optional(),
@@ -68,7 +71,7 @@ export const educationSchema = z.object({
   university: z.string(),
   degree: z.string(),
   major: z.string().optional(),
-  graduationYear: z.string(),
+  graduationYear: z.string().optional(),
   gpa: z.string().optional(),
 });
 
@@ -125,6 +128,8 @@ export const resumeSchema = z.object({
   }),
   personal: z.object({
     fullName: z.string(),
+    /** Bí danh / nickname — hiển thị dưới tên */
+    alias: z.string().optional(),
     title: z.string(),
     avatar: z.string().url().optional().or(z.literal("")),
     contact: contactSchema,
@@ -147,16 +152,30 @@ export type SectionId = z.infer<typeof sectionIdSchema>;
 export type SkillCategory = z.infer<typeof skillCategorySchema>;
 export type Experience = z.infer<typeof experienceSchema>;
 export type Project = z.infer<typeof projectSchema>;
+export type Education = z.infer<typeof educationSchema>;
+export type Language = z.infer<typeof languageSchema>;
+export type Certification = z.infer<typeof certificationSchema>;
 
-export const DEFAULT_SECTION_ORDER: SectionId[] = [
+/** Section cốt lõi — khớp src/resume-basic.ts */
+export const BASIC_SECTION_ORDER: SectionId[] = [
   "summary",
   "skills",
   "experience",
+  "education",
+  "languages",
+];
+
+/** Section nâng cao — khớp src/resume-advanced.ts */
+export const ADVANCED_SECTION_ORDER: SectionId[] = [
   "projects",
   "certifications",
-  "education",
   "opensource",
-  "languages",
+];
+
+/** Thứ tự mặc định: basic + advanced */
+export const DEFAULT_SECTION_ORDER: SectionId[] = [
+  ...BASIC_SECTION_ORDER,
+  ...ADVANCED_SECTION_ORDER,
 ];
 
 export function validateResume(data: unknown): Resume {

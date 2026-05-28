@@ -1,8 +1,10 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- *  CẤU HÌNH FONT — chỉnh tại file này
- *  Hướng dẫn: src/font/HUONG_DAN_DOI_FONT.md
+ *  FONT — src/font.ts
+ *  Hướng dẫn: src/huongdan.md
  * ═══════════════════════════════════════════════════════════════
+ *
+ * Sau khi đổi `variable`, cập nhật khớp trong src/app/layout.tsx (next/font).
  */
 
 export const fonts = {

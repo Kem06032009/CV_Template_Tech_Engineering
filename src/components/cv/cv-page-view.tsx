@@ -8,7 +8,7 @@ import { LayoutSwitcher } from "@/components/cv/layout-switcher";
 import { LocaleToggle } from "@/components/cv/locale-toggle";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { TechBackground } from "@/components/ui/tech-background";
-import { appConfig } from "@/data/config";
+import { appConfig } from "@/config";
 import type { CVLocale } from "@/i18n/section-labels";
 import type { LayoutType, Resume } from "@/lib/schema/resume";
 
@@ -17,6 +17,7 @@ const translateErrorVi = "Không thể dịch. Vui lòng thử lại.";
 /** Trang xem CV — zoom x2 màn hình; bản in riêng scale 1:1 */
 export function CvPageView({ resume }: { resume: Resume }) {
   const scale = appConfig.browserDisplayScale;
+  const { features } = appConfig;
   const [layout, setLayout] = useState<LayoutType>(resume.meta.layout);
   const [locale, setLocale] = useState<CVLocale>("vi");
   const [enResume, setEnResume] = useState<Resume | null>(null);
@@ -36,7 +37,7 @@ export function CvPageView({ resume }: { resume: Resume }) {
   }, [locale]);
 
   const fetchTranslation = useCallback(async () => {
-    if (enResume) return;
+    if (!features.translationApi || enResume) return;
     setLoading(true);
     setError(null);
     try {
@@ -54,7 +55,7 @@ export function CvPageView({ resume }: { resume: Resume }) {
     } finally {
       setLoading(false);
     }
-  }, [enResume, resume]);
+  }, [enResume, resume, features.translationApi]);
 
   const handleToggleLocale = () => {
     if (locale === "vi") {
@@ -72,7 +73,7 @@ export function CvPageView({ resume }: { resume: Resume }) {
       className="relative min-h-screen cv-app-root"
       style={{ "--cv-display-scale": String(scale) } as React.CSSProperties}
     >
-      <TechBackground />
+      {features.techBackground && <TechBackground />}
 
       <header className="no-print sticky top-0 z-50 border-b border-cv/60 backdrop-blur-xl bg-[var(--header-bg)]">
         <div className="tech-header-bar w-full absolute bottom-0 left-0" />
@@ -91,15 +92,19 @@ export function CvPageView({ resume }: { resume: Resume }) {
             </span>
           </motion.div>
           <div className="flex items-center gap-2 shrink-0">
-            <LocaleToggle
-              locale={locale}
-              loading={loading}
-              error={error}
-              onToggle={handleToggleLocale}
-            />
-            <LayoutSwitcher value={layout} onChange={setLayout} />
+            {features.localeToggle && features.translationApi && (
+              <LocaleToggle
+                locale={locale}
+                loading={loading}
+                error={error}
+                onToggle={handleToggleLocale}
+              />
+            )}
+            {features.layoutSwitcher && (
+              <LayoutSwitcher value={layout} onChange={setLayout} />
+            )}
             <ExportActions resume={displayResume} />
-            <ThemeToggle />
+            {features.themeToggle && <ThemeToggle />}
           </div>
         </div>
       </header>

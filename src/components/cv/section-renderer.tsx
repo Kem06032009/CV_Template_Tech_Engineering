@@ -1,4 +1,5 @@
 import type { Resume, SectionId } from "@/lib/schema/resume";
+import { hasSectionContent } from "@/lib/resume-normalize";
 import type { CVLocale } from "@/i18n/section-labels";
 import { CertificationsSection } from "@/components/cv/sections/certifications";
 import { EducationSection } from "@/components/cv/sections/education";
@@ -30,6 +31,8 @@ export function SectionRenderer({
   variant?: Variant;
   compact?: boolean;
 }) {
+  if (!hasSectionContent(resume, sectionId)) return null;
+
   const v = variant;
   const locale: CVLocale = resume.meta.locale === "vi" ? "vi" : "en";
 

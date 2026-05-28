@@ -26,7 +26,7 @@
   --color-emerald-500: #10b981;
 }
 
-/* Màu CV: src/color/theme.ts — inject trong layout.tsx */
+/* Màu CV: src/color.ts — inject trong layout.tsx */
 
 html {
   scroll-behavior: smooth;

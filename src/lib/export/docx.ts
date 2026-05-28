@@ -6,6 +6,7 @@ import {
   HeadingLevel,
 } from "docx";
 import type { Resume } from "@/lib/schema/resume";
+import { hasSectionContent } from "@/lib/resume-normalize";
 import { getSectionLabel, getUiString } from "@/i18n/section-labels";
 
 export async function exportResumeToDocx(resume: Resume): Promise<Blob> {
@@ -53,86 +54,103 @@ export async function exportResumeToDocx(resume: Resume): Promise<Blob> {
     children.push(new Paragraph({ text: "" }));
   }
 
-  children.push(
-    new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "summary") }),
-    new Paragraph({ children: [new TextRun(resume.summary)] }),
-    new Paragraph({ text: "" }),
-  );
-
-  children.push(
-    new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "skills") }),
-  );
-  for (const cat of resume.skills) {
+  if (hasSectionContent(resume, "summary")) {
     children.push(
-      new Paragraph({
-        children: [
-          new TextRun({ text: cat.label, bold: true }),
-          new TextRun({ text: ": " + cat.skills.map((s) => s.name).join(", ") }),
-        ],
-      }),
+      new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "summary") }),
+      new Paragraph({ children: [new TextRun(resume.summary)] }),
+      new Paragraph({ text: "" }),
     );
   }
-  children.push(new Paragraph({ text: "" }));
 
-  children.push(
-    new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "experience") }),
-  );
-  for (const exp of resume.experience) {
-    const dates = exp.current
-      ? `${exp.startDate} – ${getUiString(locale, "present")}`
-      : `${exp.startDate} – ${exp.endDate ?? ""}`;
+  if (hasSectionContent(resume, "skills")) {
     children.push(
-      new Paragraph({
-        children: [
-          new TextRun({ text: exp.position, bold: true }),
-          new TextRun({ text: ` | ${exp.company} | ${dates}` }),
-        ],
-      }),
+      new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "skills") }),
     );
-    if (exp.stack?.length) {
+    for (const cat of resume.skills) {
       children.push(
         new Paragraph({
-          children: [new TextRun({ text: `${getUiString(locale, "stack")}: ${exp.stack.join(", ")}`, italics: true })],
+          children: [
+            new TextRun({ text: cat.label, bold: true }),
+            new TextRun({ text: ": " + cat.skills.map((s) => s.name).join(", ") }),
+          ],
         }),
       );
     }
-    for (const ach of exp.achievements) {
-      children.push(
-        new Paragraph({ bullet: { level: 0 }, children: [new TextRun(ach)] }),
-      );
-    }
-    for (const r of exp.responsibilities ?? []) {
-      children.push(
-        new Paragraph({ bullet: { level: 0 }, children: [new TextRun(r)] }),
-      );
-    }
+    children.push(new Paragraph({ text: "" }));
   }
-  children.push(new Paragraph({ text: "" }));
 
-  children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "projects") }));
-  for (const proj of resume.projects) {
+  if (hasSectionContent(resume, "experience")) {
     children.push(
-      new Paragraph({
-        children: [new TextRun({ text: proj.name, bold: true })],
-      }),
+      new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "experience") }),
     );
-    if (proj.description) {
-      children.push(new Paragraph({ children: [new TextRun(proj.description)] }));
-    }
-    children.push(
-      new Paragraph({
-        children: [new TextRun({ text: proj.stack.join(", "), italics: true })],
-      }),
-    );
-    for (const ach of proj.achievements ?? []) {
+    for (const exp of resume.experience) {
+      const dates = exp.current
+        ? `${exp.startDate} – ${getUiString(locale, "present")}`
+        : `${exp.startDate} – ${exp.endDate ?? ""}`;
       children.push(
-        new Paragraph({ bullet: { level: 0 }, children: [new TextRun(ach)] }),
+        new Paragraph({
+          children: [
+            new TextRun({ text: exp.position, bold: true }),
+            new TextRun({ text: ` | ${exp.company} | ${dates}` }),
+          ],
+        }),
       );
+      if (exp.stack?.length) {
+        children.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `${getUiString(locale, "stack")}: ${exp.stack.join(", ")}`,
+                italics: true,
+              }),
+            ],
+          }),
+        );
+      }
+      for (const ach of exp.achievements ?? []) {
+        children.push(
+          new Paragraph({ bullet: { level: 0 }, children: [new TextRun(ach)] }),
+        );
+      }
+      for (const r of exp.responsibilities ?? []) {
+        children.push(
+          new Paragraph({ bullet: { level: 0 }, children: [new TextRun(r)] }),
+        );
+      }
     }
+    children.push(new Paragraph({ text: "" }));
   }
-  children.push(new Paragraph({ text: "" }));
 
-  if (resume.certifications.length) {
+  if (hasSectionContent(resume, "projects")) {
+    children.push(
+      new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "projects") }),
+    );
+    for (const proj of resume.projects) {
+      children.push(
+        new Paragraph({
+          children: [new TextRun({ text: proj.name, bold: true })],
+        }),
+      );
+      if (proj.description) {
+        children.push(new Paragraph({ children: [new TextRun(proj.description)] }));
+      }
+      if (proj.stack?.length) {
+        children.push(
+          new Paragraph({
+            children: [new TextRun({ text: proj.stack.join(", "), italics: true })],
+          }),
+        );
+      }
+      for (const ach of proj.achievements ?? []) {
+        children.push(
+          new Paragraph({ bullet: { level: 0 }, children: [new TextRun(ach)] }),
+        );
+      }
+    }
+    children.push(new Paragraph({ text: "" }));
+  }
+
+  if (hasSectionContent(resume, "certifications")) {
     children.push(
       new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "certifications") }),
     );
@@ -142,19 +160,22 @@ export async function exportResumeToDocx(resume: Resume): Promise<Blob> {
     children.push(new Paragraph({ text: "" }));
   }
 
-  if (resume.education.length) {
-    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "education") }));
+  if (hasSectionContent(resume, "education")) {
+    children.push(
+      new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "education") }),
+    );
     for (const edu of resume.education) {
+      const year = edu.graduationYear ? ` (${edu.graduationYear})` : "";
       children.push(
         new Paragraph({
-          text: `${edu.university} — ${edu.degree}${edu.major ? `, ${edu.major}` : ""} (${edu.graduationYear})`,
+          text: `${edu.university} — ${edu.degree}${edu.major ? `, ${edu.major}` : ""}${year}`,
         }),
       );
     }
     children.push(new Paragraph({ text: "" }));
   }
 
-  if (resume.openSource) {
+  if (hasSectionContent(resume, "opensource") && resume.openSource) {
     children.push(
       new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "openSource") }),
     );
@@ -169,8 +190,10 @@ export async function exportResumeToDocx(resume: Resume): Promise<Blob> {
     children.push(new Paragraph({ text: "" }));
   }
 
-  if (resume.languages.length) {
-    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "languages") }));
+  if (hasSectionContent(resume, "languages")) {
+    children.push(
+      new Paragraph({ heading: HeadingLevel.HEADING_1, text: getSectionLabel(locale, "languages") }),
+    );
     for (const lang of resume.languages) {
       children.push(new Paragraph({ text: `${lang.name} — ${lang.level}` }));
     }
