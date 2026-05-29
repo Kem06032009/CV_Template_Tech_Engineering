@@ -158,12 +158,6 @@ export const resumeBasic = {
       graduationYear: "2014",
     },
     {
-      id: "edu-thcs",
-      university: "THCS Vĩnh Công",
-      degree: "Trung học cơ sở",
-      graduationYear: "2011",
-    },
-    {
       id: "edu-tieu-hoc",
       university: "Trường Tiểu học An Vĩnh Ngãi",
       degree: "Tiểu học An Vĩnh Ngãi",
