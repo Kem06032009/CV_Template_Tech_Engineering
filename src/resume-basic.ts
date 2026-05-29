@@ -6,7 +6,7 @@ import type {
 } from "@/lib/schema/resume";
 
 /**
- * RESUME BASIC — Võ Hoàng Hải Nghĩa (ZakShinn)
+ * RESUME BASIC — Trần Gia Khiêm (Kem)
  * Hướng dẫn: src/huongdan.md
  */
 
@@ -20,15 +20,15 @@ export const BASIC_SECTION_ORDER = [
 
 export const resumeBasic = {
   personal: {
-    fullName: "Võ Hoàng Hải Nghĩa",
-    alias: "NGHĨA ZAKSHIN",
+    fullName: "Trần Gia Khiêm ",
+    alias: "Kem mê vịt",
     title:
       "Senior System Administrator · DevOps Engineer · Lead Developer",
     avatar: "",
     contact: {
-      email: "nghiasoothsayer@gmail.com",
-      phone: "0968.884.946",
-      birthDate: "06/09/1996",
+      email: "saboylaanh@gmail.com",
+      phone: "0919.128.135",
+      birthDate: "06/03/2009",
       location: "Việt Nam · Ưu tiên Ubuntu Server",
       linkedin: "",
       github: "https://github.com/ZakShinn",
