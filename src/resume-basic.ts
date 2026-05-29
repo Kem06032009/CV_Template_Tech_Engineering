@@ -145,30 +145,16 @@ export const resumeBasic = {
 
   education: [
     {
-      id: "edu-ctu",
-      university: "Đại học Cần Thơ",
-      degree: "Cử nhân",
-      major: "Công nghệ thông tin",
-      graduationYear: "2024",
-    },
-    {
       id: "edu-ladec",
-      university: "Trường Cao đẳng Công nghệ Ladec",
-      degree: "Cao đẳng",
+      university: "Trường Trung Cấp Công nghệ Du Lịch Ladec",
+      degree: "Trung Học Cơ sở",
       major: "Công nghệ thông tin",
-      graduationYear: "2019",
-    },
-    {
-      id: "edu-bknamsg",
-      university: "Trường Cao đẳng Bách Khoa Nam Sài Gòn",
-      degree: "Cao đẳng",
-      major: "Y sĩ đa khoa",
-      graduationYear: "2016",
+      graduationYear: "2020-2024",
     },
     {
       id: "edu-thpt",
-      university: "THPT Nguyễn Thông",
-      degree: "Trung học phổ thông",
+      university: "THPT Trần Phú ",
+      degree: "Trung học phổ thông Trần Phú",
       graduationYear: "2014",
     },
     {
@@ -179,8 +165,8 @@ export const resumeBasic = {
     },
     {
       id: "edu-tieu-hoc",
-      university: "Trường Tiểu học Vĩnh Công",
-      degree: "Tiểu học",
+      university: "Trường Tiểu học An Vĩnh Ngãi",
+      degree: "Tiểu học An Vĩnh Ngãi",
       graduationYear: "2007",
     },
   ] satisfies Education[],
